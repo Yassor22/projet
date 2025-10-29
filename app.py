@@ -12,8 +12,10 @@ st.sidebar.write('The used model is RandomForestClassifier model with accuracy_s
 st.sidebar.write('Limitation : small-sized data\n If you can share deindentifiable data please Contact me')
 st.sidebar.write('Created by ')
 st.sidebar.markdown(' "Yasser Ali Okasha"')
+
 st.sidebar.write('Supervisied by ')
 st.sidebar.markdown('"professor.khaled Madbouly"')
+st.sidebar.write(' Assisted By"Shahed"')
 st.sidebar.write('Contact details ')
 st.sidebar.write("Email: yasser.okasha@alexmed.edu.eg")
 st.title('Prediction of locally advanced rectal cancer response to TNT')
@@ -83,12 +85,13 @@ if btn== True:
     input_data=np.array([[scaled_age,scaled_length,scaled_distance,scaled_dimensions,scaled_quadrants_involved,gender_encoded,stageT_encoded,stageN_encoded,sphincter_encoded,biopsy_encoded,TNT_encoded,course_encoded]])
    
     prediction_encoded = model.predict(input_data)[0]
-    if prediction_encoded == 0:
-            st.success('Your patient mostly will get partial pathological response')
-    elif prediction_encoded == 1:
+    if prediction_encoded == 1:
+            st.warning('Your patient mostly will get complete pathological response')
+            
+    elif prediction_encoded == 0:
             st.error('Unfortunately, Your patient mostly will not get pathological response')
     else:
-            st.warning('Your patient mostly will get complete pathological response')
+            st.success('Your patient mostly will get partial pathological response')
 
 
 
