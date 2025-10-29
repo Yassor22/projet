@@ -64,7 +64,7 @@ if btn== True:
     scaled_quadrants_involved = scaler.transform([[quadrants_involved]])[0][0]
     scaled_dimensions = scaler.transform([[dimensions]])[0][0]
     scaled_length = scaler.transform([[length]])[0][0]
-    model= jb.load('Random_model.pkl')
+    model= jb.load('svc_model.pkl')
     gender_mapping={'Female':0, 'Male':1}
     gender_encoded= gender_mapping[gender]
     stageT_mapping={'T0':0, 'T1':1, 'T3a':2,'T3b':3,'T3c':4,'T3d':7, 'T4a':5,'T4b':6}
@@ -82,7 +82,7 @@ if btn== True:
 
     input_data=np.array([[scaled_age,scaled_length,scaled_distance,scaled_dimensions,scaled_quadrants_involved,gender_encoded,stageT_encoded,stageN_encoded,sphincter_encoded,biopsy_encoded,TNT_encoded,course_encoded]])
    
-    prediction_encoded = model.predict(input_data)
+    prediction_encoded = model.predict(input_data)[0]
     if prediction_encoded == 0:
             st.success('Your patient mostly will get partial pathological response')
     elif prediction_encoded == 1:
