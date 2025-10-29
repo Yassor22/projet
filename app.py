@@ -4,7 +4,7 @@ import pandas as pd
 import joblib as jb
 from sklearn.preprocessing import StandardScaler
 
-df = pd.read_excel('master_sheet for machine learning.xlsx')
+df= pd.read_excel('/workspaces/codespaces-blank/master_sheet for machine learning.xlsx')
 st.sidebar.header('This is a predictive model for locally advanced Rectal cancer to TNT')
 st.sidebar.image('https://tse4.mm.bing.net/th/id/OIP.j2TJw0vapJPgHsqrhGYUfgHaHa?pid=ImgDet&w=185&h=185&c=7&dpr=1.1&o=7&rm=3')
 st.sidebar.write('This application has been built to predicit the reponse of locally advanced Rectal cancer to the types of total neoadjuvant therapy')
@@ -18,10 +18,10 @@ st.sidebar.write('Contact details ')
 st.sidebar.write("Email: yasser.okasha@alexmed.edu.eg")
 st.title('Prediction of locally advanced rectal cancer response to TNT')
 a1, a2,a3 = st.columns(3)
-a1.image('cancer.JPG')
-a2.image('radiotherapy.JPG')
-a2.image('Capture.JPG')
-a3.image('surgery.JPG')
+a1.image('/workspaces/codespaces-blank/cancer.JPG')
+a2.image('/workspaces/codespaces-blank/radiotherapy.JPG')
+a2.image('/workspaces/codespaces-blank/Capture.JPG')
+a3.image('/workspaces/codespaces-blank/surgery.JPG')
 
 st.text('Please Fill the following parameters about your ptient to predict the Response')
 st.write('Demographic Data')
@@ -61,14 +61,15 @@ if btn== True:
     scaler= jb.load('scaler.pkl')
     scaled_age = scaler.transform([[Age]])[0][0]
     scaled_distance = scaler.transform([[distance]])[0][0]
+    scaled_quadrants_involved = scaler.transform([[quadrants_involved]])[0][0]
     scaled_dimensions = scaler.transform([[dimensions]])[0][0]
     scaled_length = scaler.transform([[length]])[0][0]
     model= jb.load('Random_model.pkl')
     gender_mapping={'Female':0, 'Male':1}
     gender_encoded= gender_mapping[gender]
-    stageT_mapping={'T1':0, 'T2':1, 'T3a':2,'T3b':3,'T3c':4,'T3d':5, 'T4a':6,'T4b':7}
+    stageT_mapping={'T0':0, 'T1':1, 'T3a':2,'T3b':3,'T3c':4,'T3d':7, 'T4a':5,'T4b':6}
     stageT_encoded= stageT_mapping[stageT]
-    stageN_mapping={'N0':0,'N1a':1,'N1b':2,'N1c':3, 'N2a':4,'N2b':5, 'N3':6}
+    stageN_mapping={'N0':0,'N1':1,'N1a':10,'N1b':2,'N1c':9, 'N2a':3,'N2b':4, 'N2c':5,'N3a':6,'N3b':7,'N3c':8}
     stageN_encoded= stageN_mapping[StagN]
     sphincter_mapping={'Yes':0, 'No':1}
     sphincter_encoded= sphincter_mapping[sphincter]
@@ -79,7 +80,7 @@ if btn== True:
     course_mapping={'Regression':0, 'Stationary':1,'Progression':2}
     course_encoded= course_mapping[course]
 
-    input_data=np.array([[scaled_age,scaled_length,scaled_distance,scaled_dimensions,gender_encoded,stageT_encoded,stageN_encoded,sphincter_encoded,biopsy_encoded,TNT_encoded,course_encoded]])
+    input_data=np.array([[scaled_age,scaled_length,scaled_distance,scaled_dimensions,scaled_quadrants_involved,gender_encoded,stageT_encoded,stageN_encoded,sphincter_encoded,biopsy_encoded,TNT_encoded,course_encoded]])
    
     prediction_encoded = model.predict(input_data)[0]
     if prediction_encoded == 0:
