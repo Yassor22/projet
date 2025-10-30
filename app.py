@@ -67,10 +67,9 @@ if btn:
         scaler = jb.load('scaler.pkl')
         model = jb.load('svc_model.pkl')
         
-        # Debug: Show what we're loading
         st.write("✅ Scaler and model loaded successfully")
         
-        # Create a complete feature array FIRST, then scale
+        # Create mappings
         gender_mapping = {'Female': 0, 'Male': 1}
         gender_encoded = gender_mapping[gender]
         
@@ -97,7 +96,6 @@ if btn:
         course_mapping = {'Regression': 0, 'Stationary': 1, 'Progression': 2}
         course_encoded = course_mapping[course]
         
-        # ADD MISSING MAPPINGS
         antrp_mapping = {'Anterior': 0, 'posterior': 1, 'lateral': 2, 'All': 3}
         antrp_encoded = antrp_mapping[antorp]
         
@@ -106,21 +104,21 @@ if btn:
         
         tnt_chemo_mapping = {'induction': 0, 'Consolidation': 1}
         tnt_chemo_encoded = tnt_chemo_mapping[tnt]
-        
-        # Create complete input array with ALL features
+
+        # Create input array - USE ONLY THE FEATURES YOUR MODEL EXPECTS
+        # Try with just the basic features first
         input_data = np.array([[
-            Age, length, distance, dimensions, quadrants_involved, bmi,
+            Age, length, distance, dimensions, quadrants_involved,
             gender_encoded, stageT_encoded, stageN_encoded, sphincter_encoded,
-            biopsy_encoded, TNT_encoded, course_encoded, antrp_encoded,
-            invasion_encoded, tnt_chemo_encoded
+            biopsy_encoded, TNT_encoded, course_encoded
         ]])
         
-        # Scale the complete input
-        input_scaled = scaler.transform(input_data)
+        st.write(f"📊 Input data shape: {input_data.shape}")
+        st.write(f"🔍 Scaler expects: {scaler.n_features_in_} features")
+        st.write(f"🔍 Model expects: {model.n_features_in_} features")
         
-        # Debug information
-        st.write(f"📊 Input shape: {input_scaled.shape}")
-        st.write(f"🔍 Model type: {type(model)}")
+        # Scale the input
+        input_scaled = scaler.transform(input_data)
         
         # Make prediction
         prediction_encoded = model.predict(input_scaled)[0]
@@ -137,4 +135,5 @@ if btn:
             
     except Exception as e:
         st.error(f"❌ Error during prediction: {str(e)}")
-        st.write("Please check that all required files (scaler.pkl, svc_model.pkl) are in the correct directory.")
+        import traceback
+        st.write(f"Detailed error: {traceback.format_exc()}")
