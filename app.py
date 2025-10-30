@@ -53,7 +53,7 @@ tnt= st.selectbox('TNT Chemotherapy', ['induction','Consolidation'])
 st.write('Postreatment MRI findings')
 course=st.selectbox('Radiological Response',['Regression', 'Stationary','Progression'])
 stagepT= st.selectbox('Post T stage',['T1','T2','T3a','T3b','T3c','T3d','T4a','T4b'])
-StagpN= st.selectbox('Post N stage',['N0','N1a','N1b','N1c','N2a','N2b','N3'])
+StagpN= st.selectbox('Post N stage',['N0','N1a','N1b','N1c','N2a','N2b','N3a','N3b','N3c'])
 
 sphincterp= st.selectbox('Sphincters involvment', ['Involved','Spared'])
 
