@@ -90,14 +90,50 @@ if btn:
             biopsy_mapping[biopsy], TNT_mapping[tnt_c], course_mapping[course]
         ]])
         
-        st.write(f"📊 Input data shape: {input_data.shape}")
-        st.write(f"🔍 Model expects: {model.n_features_in_} features")
-        st.write(f"📋 Sample input values: {input_data[0]}")
+        # DEBUG INFORMATION
+        st.write("---")
+        st.write("🔍 **DEBUG INFORMATION:**")
+        st.write(f"Input data shape: {input_data.shape}")
+        st.write(f"Model expects: {model.n_features_in_} features")
+        st.write(f"Input values: {input_data[0]}")
         
-        # Make prediction
+        # Check prediction probabilities
+        if hasattr(model, 'predict_proba'):
+            probabilities = model.predict_proba(input_data)[0]
+            st.write(f"📊 Prediction probabilities: {probabilities}")
+            st.write(f"📈 Class probabilities: {dict(zip(model.classes_, probabilities))}")
+        
+        # Get raw prediction
         prediction_encoded = model.predict(input_data)[0]
-        
         st.write(f"🎯 Raw prediction value: {prediction_encoded}")
+        
+        # Check if model always predicts the same
+        st.write(f"🏷️ Model classes: {model.classes_}")
+        
+        # Test with extreme values to see if prediction changes
+        st.write("---")
+        st.write("🧪 **TESTING EXTREME VALUES:**")
+        
+        # Test case 1: Young patient with early stage
+        test_data1 = np.array([[
+            30, 5, 3, 2, 1,  # Young, short length, close distance, small dimensions, few quadrants
+            1, 1, 0, 1, 8, 1, 0  # Male, T1, N0, No sphincter, Well differentiated, Short course, Regression
+        ]])
+        
+        # Test case 2: Old patient with advanced stage
+        test_data2 = np.array([[
+            80, 10, 8, 10, 4,  # Old, long length, far distance, large dimensions, all quadrants
+            0, 6, 8, 0, 1, 0, 2  # Female, T4b, N3c, Sphincter involved, Mucoid, Long course, Progression
+        ]])
+        
+        test_pred1 = model.predict(test_data1)[0]
+        test_pred2 = model.predict(test_data2)[0]
+        
+        st.write(f"Test case 1 (Early stage): {test_pred1}")
+        st.write(f"Test case 2 (Advanced stage): {test_pred2}")
+        
+        st.write("---")
+        st.write("🎯 **PREDICTION RESULT:**")
         
         # Display result
         if prediction_encoded == 1:
