@@ -63,65 +63,39 @@ btn = st.button('Submit')
 
 if btn:
     try:
-        # Load the scaler and model
-        scaler = jb.load('scaler.pkl')
+        # Load the model only - no scaling
         model = jb.load('svc_model.pkl')
         
-        st.write("✅ Scaler and model loaded successfully")
+        st.write("✅ Model loaded successfully")
         
         # Create mappings
         gender_mapping = {'Female': 0, 'Male': 1}
-        gender_encoded = gender_mapping[gender]
-        
         stageT_mapping = {'T1': 1, 'T2': 7, 'T3a': 2, 'T3b': 3, 'T3c': 4, 'T3d': 7, 'T4a': 5, 'T4b': 6}
-        stageT_encoded = stageT_mapping[stageT]
-        
         stageN_mapping = {'N0': 0, 'N1a': 10, 'N1b': 2, 'N1c': 9, 'N2a': 3, 'N2b': 4, 'N3a': 6, 'N3b': 7, 'N3c': 8}
-        stageN_encoded = stageN_mapping[StagN]
-        
         sphincter_mapping = {'Yes': 0, 'No': 1}
-        sphincter_encoded = sphincter_mapping[sphincter]
-        
         biopsy_mapping = {
             'Well differentiated adenocarcinoma': 8,
             'Moderately differentiated adenocarcinoma': 6,
             'poorly differentiated adenocarcinoma': 4,
             'Mucoid adenocarcinoma': 1
         }
-        biopsy_encoded = biopsy_mapping[biopsy]
-        
         TNT_mapping = {'Short course': 1, 'long course': 0}
-        TNT_encoded = TNT_mapping[tnt_c]
-        
         course_mapping = {'Regression': 0, 'Stationary': 1, 'Progression': 2}
-        course_encoded = course_mapping[course]
-        
-        antrp_mapping = {'Anterior': 0, 'posterior': 1, 'lateral': 2, 'All': 3}
-        antrp_encoded = antrp_mapping[antorp]
-        
-        invasion_mapping = {'Yes': 1, 'No': 0}
-        invasion_encoded = invasion_mapping[invasion]
-        
-        tnt_chemo_mapping = {'induction': 0, 'Consolidation': 1}
-        tnt_chemo_encoded = tnt_chemo_mapping[tnt]
 
-        # Create input array - USE ONLY THE FEATURES YOUR MODEL EXPECTS
-        # Try with just the basic features first
+        # Create input array WITHOUT scaling
         input_data = np.array([[
             Age, length, distance, dimensions, quadrants_involved,
-            gender_encoded, stageT_encoded, stageN_encoded, sphincter_encoded,
-            biopsy_encoded, TNT_encoded, course_encoded
+            gender_mapping[gender], stageT_mapping[stageT], 
+            stageN_mapping[StagN], sphincter_mapping[sphincter],
+            biopsy_mapping[biopsy], TNT_mapping[tnt_c], course_mapping[course]
         ]])
         
         st.write(f"📊 Input data shape: {input_data.shape}")
-        st.write(f"🔍 Scaler expects: {scaler.n_features_in_} features")
         st.write(f"🔍 Model expects: {model.n_features_in_} features")
-        
-        # Scale the input
-        input_scaled = scaler.transform(input_data)
+        st.write(f"📋 Sample input values: {input_data[0]}")
         
         # Make prediction
-        prediction_encoded = model.predict(input_scaled)[0]
+        prediction_encoded = model.predict(input_data)[0]
         
         st.write(f"🎯 Raw prediction value: {prediction_encoded}")
         
