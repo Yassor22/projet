@@ -69,7 +69,7 @@ if btn== True:
     model= jb.load('svc_model.pkl')
     gender_mapping={'Female':0, 'Male':1}
     gender_encoded= gender_mapping[gender]
-    stageT_mapping={'T0':0, 'T1':1, 'T3a':2,'T3b':3,'T3c':4,'T3d':7, 'T4a':5,'T4b':6}
+    stageT_mapping={'T0':0, 'T1':1,'T2':7,'T3a':2,'T3b':3,'T3c':4,'T3d':7, 'T4a':5,'T4b':6}
     stageT_encoded= stageT_mapping[stageT]
     stageN_mapping={'N0':0,'N1':1,'N1a':10,'N1b':2,'N1c':9, 'N2a':3,'N2b':4, 'N2c':5,'N3a':6,'N3b':7,'N3c':8}
     stageN_encoded= stageN_mapping[StagN]
